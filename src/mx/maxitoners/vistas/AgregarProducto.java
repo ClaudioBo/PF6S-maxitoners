@@ -10,6 +10,11 @@ package mx.maxitoners.vistas;
  * @author hectorbenitezalvarez
  */
 public class AgregarProducto extends javax.swing.JFrame {
+    
+    String nombre;
+    int cantidad;
+    double precio;
+    int categoria;
 
     /**
      * Creates new form AgregarProducto
@@ -33,13 +38,13 @@ public class AgregarProducto extends javax.swing.JFrame {
         tfNombreProductoA = new javax.swing.JTextField();
         tfCantidadProductoA = new javax.swing.JTextField();
         tfPrecioProductoA = new javax.swing.JTextField();
-        tfCategoriaProductoA = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        cmboxCategoriaA = new javax.swing.JComboBox<>();
 
         button1.setLabel("button1");
 
@@ -48,12 +53,6 @@ public class AgregarProducto extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agregar producto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24))); // NOI18N
-
-        tfCategoriaProductoA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfCategoriaProductoAActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Nombre del producto:");
 
@@ -72,31 +71,37 @@ public class AgregarProducto extends javax.swing.JFrame {
 
         btnCancelar.setText("Cancelar");
 
+        cmboxCategoriaA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cartuchos de toner nuevos comp", "Toner en kilos", "Suministros" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 323, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(141, 141, 141)
+                                .addComponent(cmboxCategoriaA, 0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap(108, Short.MAX_VALUE)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(101, 101, 101)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(tfCategoriaProductoA, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                        .addComponent(tfPrecioProductoA, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(tfCantidadProductoA, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(tfNombreProductoA, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(101, 101, 101)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(tfPrecioProductoA, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                .addComponent(tfCantidadProductoA, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(tfNombreProductoA, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addGap(45, 45, 45))
         );
         jPanel2Layout.setVerticalGroup(
@@ -115,9 +120,9 @@ public class AgregarProducto extends javax.swing.JFrame {
                     .addComponent(tfPrecioProductoA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfCategoriaProductoA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(cmboxCategoriaA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,12 +144,21 @@ public class AgregarProducto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfCategoriaProductoAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCategoriaProductoAActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfCategoriaProductoAActionPerformed
-
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
+        nombre = tfNombreProductoA.getText();
+        cantidad = Integer.parseInt(tfCantidadProductoA.getText());
+        precio = Double.parseDouble(tfPrecioProductoA.getText());
+        String condicion = cmboxCategoriaA.getSelectedItem().toString();
+        
+        switch(condicion){
+            case "Cartuchos de toner nuevos comp":
+                categoria = 1;
+            case "Toner en kilos":
+                categoria = 2;
+            case "Suministros":
+                categoria = 3;
+        }   
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
@@ -186,6 +200,7 @@ public class AgregarProducto extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnCancelar;
     private java.awt.Button button1;
+    private javax.swing.JComboBox<String> cmboxCategoriaA;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -193,7 +208,6 @@ public class AgregarProducto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField tfCantidadProductoA;
-    private javax.swing.JTextField tfCategoriaProductoA;
     private javax.swing.JTextField tfNombreProductoA;
     private javax.swing.JTextField tfPrecioProductoA;
     // End of variables declaration//GEN-END:variables

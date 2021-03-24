@@ -43,14 +43,12 @@
                               <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="tfNombreProducto" alignment="1" pref="216" max="32767" attributes="0"/>
-                              <Component id="tfCantidadProducto" alignment="1" max="32767" attributes="0"/>
-                              <Component id="tfPrecioProducto" alignment="1" max="32767" attributes="0"/>
-                              <Component id="tfCategoria" alignment="1" max="32767" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="tfNombreProducto" alignment="1" pref="216" max="32767" attributes="0"/>
+                          <Component id="tfCantidadProducto" alignment="1" max="32767" attributes="0"/>
+                          <Component id="tfPrecioProducto" alignment="1" max="32767" attributes="0"/>
+                          <Component id="btnCancelar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmboxCategoria" alignment="1" pref="216" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -58,7 +56,7 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace pref="54" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -85,7 +83,7 @@
               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmboxCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="52" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -145,6 +143,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Editar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCancelar">
       <Properties>
@@ -155,6 +156,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tfNombreProducto">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfNombreProductoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="tfCantidadProducto">
     </Component>
@@ -163,7 +167,19 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfPrecioProductoActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="tfCategoria">
+    <Component class="javax.swing.JComboBox" name="cmboxCategoria">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="Cartuchos de toner nuevos comp"/>
+            <StringItem index="1" value="Toner en kilos"/>
+            <StringItem index="2" value="Suministros"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

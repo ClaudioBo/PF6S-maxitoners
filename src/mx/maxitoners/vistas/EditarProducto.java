@@ -10,6 +10,11 @@ package mx.maxitoners.vistas;
  * @author Alfonso
  */
 public class EditarProducto extends javax.swing.JFrame {
+    
+    String nombre;
+    int cantidad;
+    double precio;
+    int categoria;
 
     /**
      * Creates new form EditarProducto
@@ -37,7 +42,7 @@ public class EditarProducto extends javax.swing.JFrame {
         tfNombreProducto = new javax.swing.JTextField();
         tfCantidadProducto = new javax.swing.JTextField();
         tfPrecioProducto = new javax.swing.JTextField();
-        tfCategoria = new javax.swing.JTextField();
+        cmboxCategoria = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,15 +63,28 @@ public class EditarProducto extends javax.swing.JFrame {
 
         btnEditar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnCancelar.setText("Cancelar");
+
+        tfNombreProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfNombreProductoActionPerformed(evt);
+            }
+        });
 
         tfPrecioProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfPrecioProductoActionPerformed(evt);
             }
         });
+
+        cmboxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cartuchos de toner nuevos comp", "Toner en kilos", "Suministros" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,17 +106,16 @@ public class EditarProducto extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(btnEditar)
                                 .addGap(102, 102, 102)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfNombreProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(tfCantidadProducto, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfPrecioProducto, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnCancelar)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(tfNombreProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                                .addComponent(tfCantidadProducto)
-                                .addComponent(tfPrecioProducto)
-                                .addComponent(tfCategoria))))
+                            .addComponent(cmboxCategoria, javax.swing.GroupLayout.Alignment.TRAILING, 0, 216, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(195, 195, 195)
                         .addComponent(jLabel1)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +137,7 @@ public class EditarProducto extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(tfCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmboxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
@@ -134,6 +151,28 @@ public class EditarProducto extends javax.swing.JFrame {
     private void tfPrecioProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfPrecioProductoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfPrecioProductoActionPerformed
+
+    private void tfNombreProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNombreProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfNombreProductoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        nombre = tfNombreProducto.getText();
+        cantidad = Integer.parseInt(tfCantidadProducto.getText());
+        precio = Double.parseDouble(tfPrecioProducto.getText());
+        
+        String condicion = cmboxCategoria.getSelectedItem().toString();
+        
+        switch(condicion){
+            case "Cartuchos de toner nuevos comp":
+                categoria = 1;
+            case "Toner en kilos":
+                categoria = 2;
+            case "Suministros":
+                categoria = 3;
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,13 +212,13 @@ public class EditarProducto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JComboBox<String> cmboxCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField tfCantidadProducto;
-    private javax.swing.JTextField tfCategoria;
     private javax.swing.JTextField tfNombreProducto;
     private javax.swing.JTextField tfPrecioProducto;
     // End of variables declaration//GEN-END:variables
