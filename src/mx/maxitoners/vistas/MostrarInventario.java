@@ -1,9 +1,36 @@
 package mx.maxitoners.vistas;
 
-public class MostrarInventario extends javax.swing.JFrame {
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import mx.maxitoners.datos.Conexion;
+import mx.maxitoners.negocio.Producto;
 
+public class MostrarInventario extends javax.swing.JFrame {
+    
+    ArrayList<Producto> listaProductos;
+    Conexion con;
+    
     public MostrarInventario() {
         initComponents();
+        setVisible(true);
+        
+        con = new Conexion();
+        listaProductos = con.cargarTodos();
+        rellenarTabla();
+    }
+    
+    public void rellenarTabla(){
+        DefaultTableModel dfl = (DefaultTableModel) tbl_productos.getModel();
+        dfl.setRowCount(0);
+        for (Producto p : listaProductos) {
+            dfl.addRow(new Object[]{
+                p.getId(),
+                p.getNombre(),
+                p.getPrecio(),
+                p.getCantidad(),
+                p.getCategoria().getNombre()
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -15,7 +42,7 @@ public class MostrarInventario extends javax.swing.JFrame {
         btnEditarProducto = new javax.swing.JButton();
         btnEliminarProducto = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbl_productos = new javax.swing.JTable();
         btnResaltarExistencia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -32,17 +59,31 @@ public class MostrarInventario extends javax.swing.JFrame {
         btnEliminarProducto.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEliminarProducto.setText("Eliminar producto");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_productos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "ID", "Nombre", "Precio unitario", "Disponibles"
+                "ID", "Nombre", "Precio unitario", "Disponibles", "Categoria"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbl_productos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tbl_productos);
+        if (tbl_productos.getColumnModel().getColumnCount() > 0) {
+            tbl_productos.getColumnModel().getColumn(0).setResizable(false);
+            tbl_productos.getColumnModel().getColumn(1).setResizable(false);
+            tbl_productos.getColumnModel().getColumn(2).setResizable(false);
+            tbl_productos.getColumnModel().getColumn(3).setResizable(false);
+            tbl_productos.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         btnResaltarExistencia.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         btnResaltarExistencia.setText("Resaltar sin existencia");
@@ -110,6 +151,6 @@ public class MostrarInventario extends javax.swing.JFrame {
     private javax.swing.JButton btnResaltarExistencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbl_productos;
     // End of variables declaration//GEN-END:variables
 }
