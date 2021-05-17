@@ -14,7 +14,7 @@ public class MostrarInventario extends javax.swing.JFrame {
 
     private ArrayList<Producto> listaProductos;
     private Conexion con;
-    private boolean isResaltarEnabled = true;
+    private boolean isResaltarEnabled = false;
 
     private ArrayList<Integer> agotadosRows = new ArrayList<Integer>();
 
@@ -58,22 +58,7 @@ public class MostrarInventario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_productos = new javax.swing.JTable();
         btnResaltarExistencia = new javax.swing.JButton();
-		
-		tbl_productos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-			{
-				final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-				if(isResaltarEnabled){
-					if(agotadosRows.contains(row)){
-						c.setBackground(Color.RED);
-						return c;
-					}
-				}
-				c.setBackground(Color.WHITE);
-				return c;
-			}
-		});
+        lbl_estado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,6 +129,10 @@ public class MostrarInventario extends javax.swing.JFrame {
             }
         });
 
+        lbl_estado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_estado.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lbl_estado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,7 +157,9 @@ public class MostrarInventario extends javax.swing.JFrame {
                         .addGap(19, 19, 19))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnResaltarExistencia)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnResaltarExistencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_estado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -183,7 +174,9 @@ public class MostrarInventario extends javax.swing.JFrame {
                     .addComponent(btnEliminarProducto))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(lbl_estado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnResaltarExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
@@ -193,6 +186,11 @@ public class MostrarInventario extends javax.swing.JFrame {
 
     private void btnResaltarExistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResaltarExistenciaActionPerformed
         isResaltarEnabled = !isResaltarEnabled;
+        if(isResaltarEnabled){
+            lbl_estado.setText("Resaltando sin existencias");
+        } else {
+            lbl_estado.setText("");
+        }
         tbl_productos.repaint();
     }//GEN-LAST:event_btnResaltarExistenciaActionPerformed
 
@@ -247,6 +245,7 @@ public class MostrarInventario extends javax.swing.JFrame {
     private javax.swing.JButton btnResaltarExistencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbl_estado;
     private javax.swing.JTable tbl_productos;
     // End of variables declaration//GEN-END:variables
 
