@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,7 +20,6 @@ public class Conexion {
     private Connection conexion = null;
 
     public Conexion() {
-
         //Crear y leer base de datos
         File archivo = null;
         try {
@@ -65,7 +65,6 @@ public class Conexion {
     }
 
     public void crearTabla() throws SQLException {
-
         //Crear tabla si no existe
         try (Statement statement = getConnection().createStatement()) {
             statement.executeUpdate(""
@@ -86,7 +85,6 @@ public class Conexion {
                     if (rs.getInt(1) == 0) {
                         statement.executeUpdate(""
                                 + "INSERT INTO productos VALUES "
-                                + "(NULL, '** DATOS DE PRUEBA **', 1, 100, 1),"
                                 + "(NULL, 'Tinta HP Colores', 100, 100, 1),"
                                 + "(NULL, 'Toner HP tinta negra', 400, 14, 2),"
                                 + "(NULL, 'Pieza Scanner HP', 250, 5, 3)"
@@ -126,6 +124,59 @@ public class Conexion {
         }
 
         return null;
+    }
+
+    public int agregarProducto(Producto p) {
+        int newId = -1;
+
+        String query = "INSERT INTO productos VALUES "
+                + "(NULL, ?, ?, ?, ?);";
+
+        try (PreparedStatement st = getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            st.setString(1, p.getNombre());
+            st.setInt(2, p.getCantidad());
+            st.setDouble(3, p.getPrecio());
+            st.setInt(4, p.getCategoria().getId());
+            st.execute();
+
+            try (ResultSet rst = st.getGeneratedKeys()) {
+                if (rst.next()) {
+                    newId = rst.getInt(1);
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return newId;
+    }
+
+    public void editarProducto(Producto p) {
+        String query = "UPDATE productos SET "
+                + "nombre=?, cantidad=?, precio=?, categoria=? "
+                + "WHERE id=?;";
+
+        try (PreparedStatement st = getConnection().prepareStatement(query)) {
+            st.setString(1, p.getNombre());
+            st.setInt(2, p.getCantidad());
+            st.setDouble(3, p.getPrecio());
+            st.setInt(4, p.getCategoria().getId());
+            st.setInt(5, p.getId());
+            st.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void borrarProducto(Producto p) {
+        String query = "DELETE FROM productos WHERE id=?";
+
+        try (PreparedStatement st = getConnection().prepareStatement(query)) {
+            st.setInt(1, p.getId());
+            st.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

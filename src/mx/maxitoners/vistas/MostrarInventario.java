@@ -1,27 +1,37 @@
 package mx.maxitoners.vistas;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import mx.maxitoners.datos.Conexion;
 import mx.maxitoners.negocio.Producto;
 
 public class MostrarInventario extends javax.swing.JFrame {
-    
-    ArrayList<Producto> listaProductos;
-    Conexion con;
-    
+
+    private ArrayList<Producto> listaProductos;
+    private Conexion con;
+    private boolean isResaltarEnabled = true;
+
+    private ArrayList<Integer> agotadosRows = new ArrayList<Integer>();
+
     public MostrarInventario() {
         initComponents();
         setVisible(true);
-        
+
         con = new Conexion();
-        listaProductos = con.cargarTodos();
         rellenarTabla();
     }
-    
-    public void rellenarTabla(){
+
+    public void rellenarTabla() {
+        listaProductos = con.cargarTodos();
+        agotadosRows.clear();
         DefaultTableModel dfl = (DefaultTableModel) tbl_productos.getModel();
         dfl.setRowCount(0);
+        int row = 0;
         for (Producto p : listaProductos) {
             dfl.addRow(new Object[]{
                 p.getId(),
@@ -30,6 +40,10 @@ public class MostrarInventario extends javax.swing.JFrame {
                 p.getCantidad(),
                 p.getCategoria().getNombre()
             });
+            if (p.getCantidad() <= 0) {
+                agotadosRows.add(row);
+            }
+            row += 1;
         }
     }
 
@@ -44,6 +58,22 @@ public class MostrarInventario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_productos = new javax.swing.JTable();
         btnResaltarExistencia = new javax.swing.JButton();
+		
+		tbl_productos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+			{
+				final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				if(isResaltarEnabled){
+					if(agotadosRows.contains(row)){
+						c.setBackground(Color.RED);
+						return c;
+					}
+				}
+				c.setBackground(Color.WHITE);
+				return c;
+			}
+		});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,12 +82,29 @@ public class MostrarInventario extends javax.swing.JFrame {
 
         btnAgregarProducto.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnAgregarProducto.setText("Agregar producto");
+        btnAgregarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarProductoActionPerformed(evt);
+            }
+        });
 
         btnEditarProducto.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEditarProducto.setText("Editar producto");
+        btnEditarProducto.setEnabled(false);
+        btnEditarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarProductoActionPerformed(evt);
+            }
+        });
 
         btnEliminarProducto.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEliminarProducto.setText("Eliminar producto");
+        btnEliminarProducto.setEnabled(false);
+        btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProductoActionPerformed(evt);
+            }
+        });
 
         tbl_productos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,9 +123,13 @@ public class MostrarInventario extends javax.swing.JFrame {
             }
         });
         tbl_productos.getTableHeader().setReorderingAllowed(false);
+        tbl_productos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_productosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_productos);
         if (tbl_productos.getColumnModel().getColumnCount() > 0) {
-            tbl_productos.getColumnModel().getColumn(0).setResizable(false);
             tbl_productos.getColumnModel().getColumn(1).setResizable(false);
             tbl_productos.getColumnModel().getColumn(2).setResizable(false);
             tbl_productos.getColumnModel().getColumn(3).setResizable(false);
@@ -141,8 +192,53 @@ public class MostrarInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnResaltarExistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResaltarExistenciaActionPerformed
-        // TODO add your handling code here:
+        isResaltarEnabled = !isResaltarEnabled;
+        tbl_productos.repaint();
     }//GEN-LAST:event_btnResaltarExistenciaActionPerformed
+
+    private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
+        AgregarProducto ap = new AgregarProducto(this);
+        ap.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAgregarProductoActionPerformed
+
+    private void btnEditarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProductoActionPerformed
+        if (tbl_productos.getSelectedRow() != -1) {
+            DefaultTableModel model = (DefaultTableModel) tbl_productos.getModel();
+            int id = Integer.valueOf((int) tbl_productos.getValueAt(tbl_productos.getSelectedRow(), 0));
+            for (Producto p : listaProductos) {
+                if (p.getId() == id) {
+                    EditarProducto ep = new EditarProducto(this, p);
+                    ep.setVisible(true);
+                    this.setVisible(false);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEditarProductoActionPerformed
+
+    private void tbl_productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_productosMouseClicked
+        if (tbl_productos.getSelectedRow() != -1) {
+            btnEditarProducto.setEnabled(true);
+            btnEliminarProducto.setEnabled(true);
+        }
+    }//GEN-LAST:event_tbl_productosMouseClicked
+
+    private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
+        if (tbl_productos.getSelectedRow() != -1) {
+            DefaultTableModel model = (DefaultTableModel) tbl_productos.getModel();
+            int id = Integer.valueOf((int) tbl_productos.getValueAt(tbl_productos.getSelectedRow(), 0));
+            for (Producto p : listaProductos) {
+                if (p.getId() == id) {
+                    getConexion().borrarProducto(p);
+                    JOptionPane.showMessageDialog(this, "Producto eliminado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                    rellenarTabla();
+                    btnEditarProducto.setEnabled(false);
+                    btnEliminarProducto.setEnabled(false);
+                    break;
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
@@ -153,4 +249,13 @@ public class MostrarInventario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbl_productos;
     // End of variables declaration//GEN-END:variables
+
+    public ArrayList<Producto> getListaProductos() {
+        return listaProductos;
+    }
+
+    public Conexion getConexion() {
+        return con;
+    }
+
 }

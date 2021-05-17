@@ -1,14 +1,19 @@
 package mx.maxitoners.vistas;
 
+import javax.swing.JOptionPane;
+import mx.maxitoners.negocio.Categoria;
+import mx.maxitoners.negocio.Producto;
+
 public class AgregarProducto extends javax.swing.JFrame {
 
-    String nombre;
-    int cantidad;
-    double precio;
-    int categoria;
+    MostrarInventario main;
 
-    public AgregarProducto() {
+    public AgregarProducto(MostrarInventario main) {
+        this.main = main;
         initComponents();
+        for (Categoria cat : Categoria.values()) {
+            cmboxCategoriaA.addItem(cat.getNombre());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -35,7 +40,7 @@ public class AgregarProducto extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agregar producto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agregar producto", 2, 0, new java.awt.Font("Arial", 0, 24))); // NOI18N
 
         jLabel1.setText("Nombre del producto:");
 
@@ -53,8 +58,11 @@ public class AgregarProducto extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
-
-        cmboxCategoriaA.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cartuchos de toner nuevos comp", "Toner en kilos", "Suministros" }));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -73,8 +81,8 @@ public class AgregarProducto extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 323, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
-                                .addGap(141, 141, 141)
-                                .addComponent(cmboxCategoriaA, 0, 0, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cmboxCategoriaA, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap(108, Short.MAX_VALUE)
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -128,20 +136,49 @@ public class AgregarProducto extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        nombre = tfNombreProductoA.getText();
-        cantidad = Integer.parseInt(tfCantidadProductoA.getText());
-        precio = Double.parseDouble(tfPrecioProductoA.getText());
-        String condicion = cmboxCategoriaA.getSelectedItem().toString();
+        String nombre = tfNombreProductoA.getText().trim();
+        if (nombre.length() == 0) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un nombre", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        switch (condicion) {
-            case "Cartuchos de toner nuevos comp":
-                categoria = 1;
-            case "Toner en kilos":
-                categoria = 2;
-            case "Suministros":
-                categoria = 3;
+        int cantidad = 0;
+        try {
+            cantidad = Integer.parseInt(tfCantidadProductoA.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un numero para cantidad valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double precio = 0;
+        try {
+            precio = Double.parseDouble(tfPrecioProductoA.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un numero para precio valido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int categoria = cmboxCategoriaA.getSelectedIndex()+1;
+
+        Producto p = new Producto();
+        p.setNombre(nombre);
+        p.setCantidad(cantidad);
+        p.setPrecio(precio);
+        p.setCategoria(Categoria.getCategoria(categoria));
+        if (main.getConexion().agregarProducto(p) != -1) {
+            JOptionPane.showMessageDialog(this, "Producto agregado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            btnCancelarActionPerformed(evt);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debes ingresar un numero para precio valido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        main.setVisible(true);
+        main.rellenarTabla();
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
