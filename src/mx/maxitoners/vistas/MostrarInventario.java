@@ -61,6 +61,7 @@ public class MostrarInventario extends javax.swing.JFrame {
         lbl_estado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Maxitoners");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Mostrar inventario");
@@ -105,6 +106,25 @@ public class MostrarInventario extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tbl_productos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if(!isResaltarEnabled){
+                    c.setBackground(Color.WHITE);
+                    return c;
+                }
+
+                if(((int)tbl_productos.getValueAt(row, 3)) <= 0){
+                    c.setBackground(Color.PINK);
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+
+                return c;
             }
         });
         tbl_productos.getTableHeader().setReorderingAllowed(false);

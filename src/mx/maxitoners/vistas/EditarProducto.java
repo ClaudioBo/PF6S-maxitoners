@@ -45,8 +45,9 @@ public class EditarProducto extends javax.swing.JFrame {
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Maxitoners");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar producto", 2, 0, new java.awt.Font("Arial", 0, 24))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Editar producto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24))); // NOI18N
 
         jLabel1.setText("Nombre del producto:");
 
