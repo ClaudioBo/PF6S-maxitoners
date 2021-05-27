@@ -48,12 +48,10 @@ public class MostrarInventario extends javax.swing.JFrame {
 
         int registros = 0;
         int disponibles = 0;
-        double totalDinero = 0;
 
         for (Producto p : listaProductos) {
             registros++;
             disponibles += p.getCantidad();
-            totalDinero += p.getPrecio();
 
             dfl.addRow(new Object[]{
                 p.getId(),
@@ -68,7 +66,7 @@ public class MostrarInventario extends javax.swing.JFrame {
             row += 1;
         }
 
-        txtEstadisticas.setText(String.format("<html>Productos registrados: %s<br>Cantidad de productos disponibles: %s<br>Dinero en productos disponibles: $%s MXN</html>", registros, disponibles, totalDinero));
+        txtEstadisticas.setText(String.format("<html>Productos registrados: %s<br>Cantidad de productos disponibles: %s</html>", registros, disponibles));
         txtEstado.setForeground(Color.WHITE);
         btnRecargar.setEnabled(true);
 
@@ -209,7 +207,7 @@ public class MostrarInventario extends javax.swing.JFrame {
 
         txtEstadisticas.setForeground(new java.awt.Color(0, 0, 0));
         txtEstadisticas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        txtEstadisticas.setText("<html>\nProductos registrados: 0<br>\nCantidad de productos disponibles: 0<br>\nDinero en productos disponibles: $0 MXN\n</html>");
+        txtEstadisticas.setText("<html>\nProductos registrados: 0<br>\nCantidad de productos disponibles: 0<br>\n</html>");
         txtEstadisticas.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         txtEstado.setForeground(new java.awt.Color(255, 0, 51));
@@ -232,17 +230,6 @@ public class MostrarInventario extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(btnRecargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnResaltarExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lbl_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAgregarProducto)
@@ -254,7 +241,18 @@ public class MostrarInventario extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtEstado))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(btnRecargar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnResaltarExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbl_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

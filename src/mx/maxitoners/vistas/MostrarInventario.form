@@ -70,21 +70,6 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="txtEstadisticas" min="-2" pref="268" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
-                                  <Component id="btnRecargar" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnResaltarExistencia" min="-2" pref="217" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="lbl_estado" min="-2" pref="215" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
                       <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="btnAgregarProducto" min="-2" max="-2" attributes="0"/>
@@ -99,6 +84,21 @@
                               <Component id="txtEstado" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="txtEstadisticas" min="-2" pref="361" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                  <Component id="btnRecargar" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnResaltarExistencia" min="-2" pref="217" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="lbl_estado" min="-2" pref="215" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -286,7 +286,7 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Productos registrados: 0&lt;br&gt;&#xa;Cantidad de productos disponibles: 0&lt;br&gt;&#xa;Dinero en productos disponibles: $0 MXN&#xa;&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Productos registrados: 0&lt;br&gt;&#xa;Cantidad de productos disponibles: 0&lt;br&gt;&#xa;&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>
