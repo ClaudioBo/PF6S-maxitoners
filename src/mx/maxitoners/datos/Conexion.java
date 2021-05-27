@@ -1,5 +1,6 @@
 package mx.maxitoners.datos;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import mx.maxitoners.negocio.Producto;
 import mx.maxitoners.negocio.Respuesta;
@@ -21,7 +22,7 @@ public class Conexion {
                 if (rspns.isSuccessful()) {
                     Respuesta r = rspns.body();
                     if (r.isStatus()) {
-                        parent.getListaProductos().clear();
+//                        parent.getListaProductos().clear();
                         parent.getListaProductos().addAll(r.getProducts());
                         parent.rellenarTabla();
                     } else {
@@ -47,22 +48,27 @@ public class Conexion {
         call.enqueue(new Callback<Respuesta>() {
             @Override
             public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                parent.txtEstado.setForeground(Color.WHITE);
                 if (rspns.isSuccessful()) {
                     Respuesta r = rspns.body();
+                    
                     if (r.isStatus()) {
                         JOptionPane.showMessageDialog(null, "Producto '" + p.getNombre() + "' agregado con exito.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
                         parent.cerrar(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        parent.cerrar(true);
+                        parent.btnAgregar.setEnabled(true);
+                        parent.btnCancelar.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                parent.txtEstado.setForeground(Color.WHITE);
                 JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
-                parent.cerrar(false);
+                parent.btnAgregar.setEnabled(true);
+                parent.btnCancelar.setEnabled(true);
             }
         });
     }
@@ -78,6 +84,7 @@ public class Conexion {
         call.enqueue(new Callback<Respuesta>() {
             @Override
             public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                parent.txtEstado.setForeground(Color.WHITE);
                 if (rspns.isSuccessful()) {
                     Respuesta r = rspns.body();
                     if (r.isStatus()) {
@@ -85,19 +92,22 @@ public class Conexion {
                         parent.cerrar(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        parent.cerrar(true);
+                        parent.btnAgregar.setEnabled(true);
+                        parent.btnCancelar.setEnabled(true);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                parent.txtEstado.setForeground(Color.WHITE);
                 JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
-                parent.cerrar(false);
+                parent.btnAgregar.setEnabled(true);
+                parent.btnCancelar.setEnabled(true);
             }
         });
     }
-    
+
     public static void borrarProducto(MostrarInventario parent, Producto p) {
         Call<Respuesta> call = RetrofitUtil.obtenerApi().borrarProducto(
                 p.getId()

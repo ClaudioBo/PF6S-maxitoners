@@ -1,5 +1,6 @@
 package mx.maxitoners.vistas;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import mx.maxitoners.datos.Conexion;
 import mx.maxitoners.negocio.Categoria;
@@ -21,6 +22,7 @@ public class EditarProducto extends javax.swing.JFrame {
             cmboxCategoriaA.addItem(cat.getNombre());
         }
         cmboxCategoriaA.setSelectedIndex(p.getCategoria().getId() - 1);
+        txtEstado.setForeground(Color.WHITE);
     }
 
     @SuppressWarnings("unchecked")
@@ -40,6 +42,7 @@ public class EditarProducto extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         cmboxCategoriaA = new javax.swing.JComboBox<>();
+        txtEstado = new javax.swing.JLabel();
 
         button1.setLabel("button1");
 
@@ -83,6 +86,10 @@ public class EditarProducto extends javax.swing.JFrame {
             }
         });
 
+        txtEstado.setForeground(new java.awt.Color(255, 0, 51));
+        txtEstado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtEstado.setText("CARGANDO...");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -106,7 +113,9 @@ public class EditarProducto extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap(108, Short.MAX_VALUE)
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                         .addGap(101, 101, 101)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +148,9 @@ public class EditarProducto extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(57, 57, 57))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtEstado)
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -180,16 +191,20 @@ public class EditarProducto extends javax.swing.JFrame {
         }
 
         int categoria = cmboxCategoriaA.getSelectedIndex() + 1;
-
-        p.setNombre(nombre);
-        p.setCantidad(cantidad);
-        p.setPrecio(precio);
-        p.setCategoria(Categoria.getCategoria(categoria));
+        
+        Producto ptemp = new Producto();
+        ptemp.setId(p.getId());
+        ptemp.setNombre(nombre);
+        ptemp.setCantidad(cantidad);
+        ptemp.setPrecio(precio);
+        ptemp.setCategoria(Categoria.getCategoria(categoria));
 
         btnAgregar.setEnabled(false);
         btnCancelar.setEnabled(false);
+        
+        txtEstado.setForeground(Color.RED);
 
-        Conexion.editarProducto(this, p);
+        Conexion.editarProducto(this, ptemp);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     public void cerrar(boolean reload) {
@@ -208,8 +223,8 @@ public class EditarProducto extends javax.swing.JFrame {
     }//GEN-LAST:event_cmboxCategoriaAActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
-    private javax.swing.JButton btnCancelar;
+    public javax.swing.JButton btnAgregar;
+    public javax.swing.JButton btnCancelar;
     private java.awt.Button button1;
     private javax.swing.JComboBox<String> cmboxCategoriaA;
     private javax.swing.JButton jButton1;
@@ -221,5 +236,6 @@ public class EditarProducto extends javax.swing.JFrame {
     private javax.swing.JTextField tfCantidadProductoA;
     private javax.swing.JTextField tfNombreProductoA;
     private javax.swing.JTextField tfPrecioProductoA;
+    public javax.swing.JLabel txtEstado;
     // End of variables declaration//GEN-END:variables
 }
