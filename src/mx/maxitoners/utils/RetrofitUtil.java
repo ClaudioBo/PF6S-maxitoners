@@ -15,7 +15,7 @@ public class RetrofitUtil {
     public static MaxitonersAPI obtenerApi() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://torophp-test.io/")
+                .baseUrl("https://maxitoners.elclaudio.me/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(MaxitonersAPI.class);
