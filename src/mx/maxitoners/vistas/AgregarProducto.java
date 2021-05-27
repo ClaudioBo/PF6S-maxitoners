@@ -1,6 +1,7 @@
 package mx.maxitoners.vistas;
 
 import javax.swing.JOptionPane;
+import mx.maxitoners.datos.Conexion;
 import mx.maxitoners.negocio.Categoria;
 import mx.maxitoners.negocio.Producto;
 
@@ -166,19 +167,22 @@ public class AgregarProducto extends javax.swing.JFrame {
         p.setCantidad(cantidad);
         p.setPrecio(precio);
         p.setCategoria(Categoria.getCategoria(categoria));
-        if (main.getConexion().agregarProducto(p) != -1) {
-            JOptionPane.showMessageDialog(this, "Producto agregado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-            btnCancelarActionPerformed(evt);
-        } else {
-            JOptionPane.showMessageDialog(this, "Debes ingresar un numero para precio valido", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        
+        btnAgregar.setEnabled(false);
+        btnCancelar.setEnabled(false);
+        
+        Conexion.agregarProducto(this, p);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    public void cerrar(boolean reload){
         main.setVisible(true);
-        main.rellenarTabla();
+        if(reload) main.obtenerProductos();
         this.setVisible(false);
         this.dispose();
+    }
+    
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        cerrar(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

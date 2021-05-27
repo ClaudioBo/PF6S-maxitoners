@@ -12,22 +12,21 @@ import mx.maxitoners.negocio.Producto;
 
 public class MostrarInventario extends javax.swing.JFrame {
 
-    private ArrayList<Producto> listaProductos;
-    private Conexion con;
-    private boolean isResaltarEnabled = false;
-
+    private ArrayList<Producto> listaProductos = new ArrayList<>();
     private ArrayList<Integer> agotadosRows = new ArrayList<Integer>();
+    private boolean isResaltarEnabled = false;
 
     public MostrarInventario() {
         initComponents();
         setVisible(true);
-
-        con = new Conexion();
-        rellenarTabla();
+        obtenerProductos();
+    }
+    
+    public void obtenerProductos(){
+        Conexion.verProductos(this);
     }
 
     public void rellenarTabla() {
-        listaProductos = con.cargarTodos();
         agotadosRows.clear();
         DefaultTableModel dfl = (DefaultTableModel) tbl_productos.getModel();
         dfl.setRowCount(0);
@@ -206,7 +205,7 @@ public class MostrarInventario extends javax.swing.JFrame {
 
     private void btnResaltarExistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResaltarExistenciaActionPerformed
         isResaltarEnabled = !isResaltarEnabled;
-        if(isResaltarEnabled){
+        if (isResaltarEnabled) {
             lbl_estado.setText("Resaltando sin existencias");
         } else {
             lbl_estado.setText("");
@@ -247,9 +246,7 @@ public class MostrarInventario extends javax.swing.JFrame {
             int id = Integer.valueOf((int) tbl_productos.getValueAt(tbl_productos.getSelectedRow(), 0));
             for (Producto p : listaProductos) {
                 if (p.getId() == id) {
-                    getConexion().borrarProducto(p);
-                    JOptionPane.showMessageDialog(this, "Producto eliminado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-                    rellenarTabla();
+                    Conexion.borrarProducto(this, p);
                     btnEditarProducto.setEnabled(false);
                     btnEliminarProducto.setEnabled(false);
                     break;
@@ -272,9 +269,4 @@ public class MostrarInventario extends javax.swing.JFrame {
     public ArrayList<Producto> getListaProductos() {
         return listaProductos;
     }
-
-    public Conexion getConexion() {
-        return con;
-    }
-
 }

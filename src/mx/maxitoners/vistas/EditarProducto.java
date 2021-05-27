@@ -1,6 +1,7 @@
 package mx.maxitoners.vistas;
 
 import javax.swing.JOptionPane;
+import mx.maxitoners.datos.Conexion;
 import mx.maxitoners.negocio.Categoria;
 import mx.maxitoners.negocio.Producto;
 
@@ -177,16 +178,22 @@ public class EditarProducto extends javax.swing.JFrame {
         p.setCantidad(cantidad);
         p.setPrecio(precio);
         p.setCategoria(Categoria.getCategoria(categoria));
-        
-        main.getConexion().editarProducto(p);
-        btnCancelarActionPerformed(evt);
+
+        btnAgregar.setEnabled(false);
+        btnCancelar.setEnabled(false);
+
+        Conexion.editarProducto(this, p);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    public void cerrar(boolean reload) {
         main.setVisible(true);
-        main.rellenarTabla();
+        if (reload) main.obtenerProductos();
         this.setVisible(false);
         this.dispose();
+    }
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        cerrar(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cmboxCategoriaAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmboxCategoriaAActionPerformed

@@ -1,9 +1,17 @@
 package mx.maxitoners.negocio;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Categoria {
+    @SerializedName("1")
     CARTUCHOS(1, "Cartuchos de toner nuevos comp."),
+    
+    @SerializedName("2")
     TONER(2, "Toner en Kilos"),
+    
+    @SerializedName("3")
     SUMINISTROS(3, "Suministros");
+    
 
     private final int id;
     private final String nombre;

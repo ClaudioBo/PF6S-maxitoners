@@ -1,182 +1,126 @@
 package mx.maxitoners.datos;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import mx.maxitoners.negocio.Categoria;
 import mx.maxitoners.negocio.Producto;
+import mx.maxitoners.negocio.Respuesta;
+import mx.maxitoners.utils.RetrofitUtil;
+import mx.maxitoners.vistas.AgregarProducto;
+import mx.maxitoners.vistas.EditarProducto;
+import mx.maxitoners.vistas.MostrarInventario;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Conexion {
 
-    private Connection conexion = null;
-
-    public Conexion() {
-        //Crear y leer base de datos
-        File archivo = null;
-        try {
-            archivo = new File("database.db");
-            System.out.println(archivo.getAbsolutePath());
-            if (!archivo.exists()) {
-                archivo.createNewFile();
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        //Abrir conexion de base de datos
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conexion = DriverManager.getConnection("jdbc:sqlite:" + archivo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //Predefinir datos de prueba
-        try {
-            crearTabla();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, "Error al leer base de datos", ex);
-            JOptionPane.showMessageDialog(null, "Hubo un error al leer la base de datos.", "Error", JOptionPane.ERROR);
-            System.exit(0);
-        }
-    }
-
-    public Connection getConnection() {
-        return conexion;
-    }
-
-    public void closeConnection() {
-        try {
-            if (conexion != null) {
-                conexion.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void crearTabla() throws SQLException {
-        //Crear tabla si no existe
-        try (Statement statement = getConnection().createStatement()) {
-            statement.executeUpdate(""
-                    + "CREATE TABLE IF NOT EXISTS productos("
-                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "nombre TEXT,"
-                    + "cantidad INT,"
-                    + "precio DOUBLE,"
-                    + "categoria INT"
-                    + ")"
-            );
-        }
-
-        //Insertar datos si la tabla esta vacia
-        try (Statement statement = getConnection().createStatement()) {
-            try (ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM productos;")) {
-                if (rs.next()) {
-                    if (rs.getInt(1) == 0) {
-                        statement.executeUpdate(""
-                                + "INSERT INTO productos VALUES "
-                                + "(NULL, 'Tinta HP Colores', 100, 100, 1),"
-                                + "(NULL, 'Toner HP tinta negra', 400, 14, 2),"
-                                + "(NULL, 'Pieza Scanner HP', 250, 5, 3)"
-                        );
+    public static void verProductos(MostrarInventario parent) {
+        Call<Respuesta> call = RetrofitUtil.obtenerApi().verProductos();
+        call.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                if (rspns.isSuccessful()) {
+                    Respuesta r = rspns.body();
+                    if (r.isStatus()) {
+                        parent.getListaProductos().clear();
+                        parent.getListaProductos().addAll(r.getProducts());
+                        parent.rellenarTabla();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
-        }
+
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
-    public ArrayList<Producto> cargarTodos() {
-        ArrayList<Producto> productosCargados = new ArrayList<>();
-
-        try (Statement statement = getConnection().createStatement()) {
-            try (ResultSet rs = statement.executeQuery("SELECT * FROM productoS;")) {
-                while (rs.next()) {
-                    Producto p = new Producto();
-                    p.setId(rs.getInt(1));
-                    p.setNombre(rs.getString(2));
-                    p.setCantidad(rs.getInt(3));
-                    p.setPrecio(rs.getDouble(4));
-
-                    Categoria cat = Categoria.getCategoria(rs.getInt(5));
-                    if (cat == null) {
-                        System.out.println(String.format("Error al cargar producto #%s '%s', enumerador no encontrado", p.getId(), p.getNombre()));
-                        continue;
+    public static void agregarProducto(AgregarProducto parent, Producto p) {
+        Call<Respuesta> call = RetrofitUtil.obtenerApi().agregarProducto(
+                p.getNombre(),
+                p.getCantidad(),
+                p.getPrecio(),
+                p.getCategoria().getId()
+        );
+        call.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                if (rspns.isSuccessful()) {
+                    Respuesta r = rspns.body();
+                    if (r.isStatus()) {
+                        JOptionPane.showMessageDialog(null, "Producto '" + p.getNombre() + "' agregado con exito.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                        parent.cerrar(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        parent.cerrar(true);
                     }
-                    p.setCategoria(cat);
-                    productosCargados.add(p);
-                }
-                return productosCargados;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public int agregarProducto(Producto p) {
-        int newId = -1;
-
-        String query = "INSERT INTO productos VALUES "
-                + "(NULL, ?, ?, ?, ?);";
-
-        try (PreparedStatement st = getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, p.getNombre());
-            st.setInt(2, p.getCantidad());
-            st.setDouble(3, p.getPrecio());
-            st.setInt(4, p.getCategoria().getId());
-            st.execute();
-
-            try (ResultSet rst = st.getGeneratedKeys()) {
-                if (rst.next()) {
-                    newId = rst.getInt(1);
                 }
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return newId;
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
+                parent.cerrar(false);
+            }
+        });
     }
 
-    public void editarProducto(Producto p) {
-        String query = "UPDATE productos SET "
-                + "nombre=?, cantidad=?, precio=?, categoria=? "
-                + "WHERE id=?;";
+    public static void editarProducto(EditarProducto parent, Producto p) {
+        Call<Respuesta> call = RetrofitUtil.obtenerApi().editarProducto(
+                p.getId(),
+                p.getNombre(),
+                p.getCantidad(),
+                p.getPrecio(),
+                p.getCategoria().getId()
+        );
+        call.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                if (rspns.isSuccessful()) {
+                    Respuesta r = rspns.body();
+                    if (r.isStatus()) {
+                        JOptionPane.showMessageDialog(null, "Producto '" + p.getNombre() + "' editado con exito.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                        parent.cerrar(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        parent.cerrar(true);
+                    }
+                }
+            }
 
-        try (PreparedStatement st = getConnection().prepareStatement(query)) {
-            st.setString(1, p.getNombre());
-            st.setInt(2, p.getCantidad());
-            st.setDouble(3, p.getPrecio());
-            st.setInt(4, p.getCategoria().getId());
-            st.setInt(5, p.getId());
-            st.execute();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
+                parent.cerrar(false);
+            }
+        });
     }
+    
+    public static void borrarProducto(MostrarInventario parent, Producto p) {
+        Call<Respuesta> call = RetrofitUtil.obtenerApi().borrarProducto(
+                p.getId()
+        );
+        call.enqueue(new Callback<Respuesta>() {
+            @Override
+            public void onResponse(Call<Respuesta> call, Response<Respuesta> rspns) {
+                if (rspns.isSuccessful()) {
+                    Respuesta r = rspns.body();
+                    if (r.isStatus()) {
+                        JOptionPane.showMessageDialog(null, "Producto '" + p.getNombre() + "' borrado con exito.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                        parent.obtenerProductos();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n " + r.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
 
-    public void borrarProducto(Producto p) {
-        String query = "DELETE FROM productos WHERE id=?";
-
-        try (PreparedStatement st = getConnection().prepareStatement(query)) {
-            st.setInt(1, p.getId());
-            st.execute();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            @Override
+            public void onFailure(Call<Respuesta> call, Throwable thrwbl) {
+                JOptionPane.showMessageDialog(null, "Hubo un error por parte del servidor:\n No hubo conexion hacia el servidor.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
 }
