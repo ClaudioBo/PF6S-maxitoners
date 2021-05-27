@@ -22,6 +22,7 @@ public class MostrarInventario extends javax.swing.JFrame {
 
     public MostrarInventario() {
         initComponents();
+        setLocationRelativeTo(null);
         setVisible(true);
         ImageIcon maxitoners = new ImageIcon(getClass().getResource("/Imagenes/Maxitoners.png"));
         ImageIcon imagen = new ImageIcon(maxitoners.getImage().getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_DEFAULT));
@@ -348,6 +349,11 @@ public class MostrarInventario extends javax.swing.JFrame {
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
         if (tbl_productos.getSelectedRow() != -1) {
+            
+            if(JOptionPane.showConfirmDialog(this, "¿Quieres eliminar este producto?", "Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE) == 1){
+                return;
+            }
+            
             int id = Integer.valueOf((int) tbl_productos.getValueAt(tbl_productos.getSelectedRow(), 0));
             for (Producto p : listaProductos) {
                 if (p.getId() == id) {

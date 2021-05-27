@@ -13,6 +13,7 @@ public class AgregarProducto extends javax.swing.JFrame {
     public AgregarProducto(MostrarInventario main) {
         this.main = main;
         initComponents();
+        setLocationRelativeTo(main);
         for (Categoria cat : Categoria.values()) {
             cmboxCategoriaA.addItem(cat.getNombre());
         }
@@ -174,28 +175,30 @@ public class AgregarProducto extends javax.swing.JFrame {
             return;
         }
 
-        int categoria = cmboxCategoriaA.getSelectedIndex()+1;
+        int categoria = cmboxCategoriaA.getSelectedIndex() + 1;
 
         Producto p = new Producto();
         p.setNombre(nombre);
         p.setCantidad(cantidad);
         p.setPrecio(precio);
         p.setCategoria(Categoria.getCategoria(categoria));
-        
+
         btnAgregar.setEnabled(false);
         btnCancelar.setEnabled(false);
-        
+
         txtEstado.setForeground(Color.RED);
         Conexion.agregarProducto(this, p);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    public void cerrar(boolean reload){
+    public void cerrar(boolean reload) {
         main.setVisible(true);
-        if(reload) main.obtenerProductos();
+        if (reload) {
+            main.obtenerProductos();
+        }
         this.setVisible(false);
         this.dispose();
     }
-    
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         cerrar(false);
     }//GEN-LAST:event_btnCancelarActionPerformed

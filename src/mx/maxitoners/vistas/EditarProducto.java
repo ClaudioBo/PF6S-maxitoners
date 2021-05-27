@@ -15,6 +15,7 @@ public class EditarProducto extends javax.swing.JFrame {
         this.main = main;
         this.p = p;
         initComponents();
+        setLocationRelativeTo(main);
         tfNombreProductoA.setText(p.getNombre());
         tfCantidadProductoA.setText(String.valueOf(p.getCantidad()));
         tfPrecioProductoA.setText(String.valueOf(p.getPrecio()));
