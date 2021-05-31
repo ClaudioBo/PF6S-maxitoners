@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".ProductoFormActivity"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:gravity="center"
+        android:text="Agregar Producto"
+        android:textColor="@color/black"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre del producto"
+        android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/txtNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Ej: Pieza de scanner HP"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/blue"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cantidad disponible"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/txtCantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text|number"
+        android:hint="30"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/blue"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Precio unitario"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/txtPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text|numberDecimal"
+        android:hint="533.10"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/blue"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categoria"
+        android:textColor="@color/black" />
+
+    <Spinner
+        android:id="@+id/spnCategorias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="guardar"
+        android:text="Guardar"
+        android:backgroundTint="@color/blue"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/rosa"
+        android:onClick="regresar"
+        android:text="Cancelar" />
+</LinearLayout>
